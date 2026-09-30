@@ -1,163 +1,180 @@
-// ==================== RECURSOS Y CONFIGURACIÓN ====================
-const CAR_IMAGES = [
-  'assets/car1_blue.png',
-  'assets/car2_gold.png',
-  'assets/car3_white.png',
-  'assets/car4_flipped.png',
-  'assets/car5_flipped.png',
-  'assets/car_blue_intro_opt.png'
+// ==================== CONFIGURACIÓN Y ASSETS ====================
+const CARS_CONFIG = [
+  { src: 'assets/car_green.png', x: '72%', y: '68%', w: 260, z: 12, rot: -8, depth: 1.15 },    // Superdeportivo verde esquina inferior derecha
+  { src: 'assets/car_yellow.png', x: '5%', y: '74%', w: 230, z: 11, rot: 5, depth: 1.1 },      // Superdeportivo amarillo esquina inferior izquierda
+  { src: 'assets/car3_white.png', x: '6%', y: '48%', w: 180, z: 9, rot: -4, depth: 0.95 },     // Deportivo blanco con rojo
+  { src: 'assets/car1_blue.png', x: '78%', y: '28%', w: 190, z: 8, rot: 12, depth: 0.9 },      // Azul superior derecha
+  { src: 'assets/car_red.png', x: '24%', y: '20%', w: 150, z: 7, rot: -6, depth: 0.8 },        // Rojo centro superior
+  { src: 'assets/car_cyan.png', x: '46%', y: '16%', w: 140, z: 6, rot: 3, depth: 0.75 },       // Cyan al fondo
+  { src: 'assets/car2_gold.png', x: '65%', y: '45%', w: 170, z: 8, rot: -10, depth: 0.88 },    // Dorado centro derecha
+  { src: 'assets/car_purple.png', x: '28%', y: '58%', w: 160, z: 8, rot: 7, depth: 0.85 }      // Morado centro izquierda
 ];
 
 // Elementos del DOM
-const introScreen = document.getElementById('intro-screen');
-const introBox = document.getElementById('intro-box');
-const introCarContainer = document.getElementById('intro-car-container');
-const startBtn = document.getElementById('start-btn');
-const mainContent = document.getElementById('main-content');
+const loaderScreen = document.getElementById('loader-screen');
+const launchBtn = document.getElementById('launch-btn');
+const trackProgress = document.getElementById('track-progress');
+const runnerCar = document.getElementById('runner-car');
+const loaderPercent = document.getElementById('loader-percent');
+const loaderText = document.getElementById('loader-text');
+const scene = document.getElementById('scene');
+const carsContainer = document.getElementById('cars');
 const bgAudio = document.getElementById('bg-audio');
-const musicToggleBtn = document.getElementById('music-toggle-btn');
-const playIcon = document.getElementById('play-icon');
-const vinylDisc = document.getElementById('vinyl-disc');
-const equalizer = document.getElementById('equalizer');
-const carsTrackZone = document.getElementById('cars-track-zone');
-const openLetterBtn = document.getElementById('open-letter-btn');
-const closeLetterBtn = document.getElementById('close-letter-btn');
-const acceptLetterBtn = document.getElementById('accept-letter-btn');
-const letterModal = document.getElementById('letter-modal');
+const audioToggle = document.getElementById('audio-toggle');
+const audioIcon = document.getElementById('audio-icon');
+const vinylIcon = document.getElementById('vinyl-icon');
 
-// ==================== INTRO CON DESTELLO AZUL ====================
-startBtn.addEventListener('click', () => {
-  // 1. Iniciar música de Lana Del Rey inmediatamente (evita bloqueo del navegador)
-  bgAudio.volume = 0.85;
-  bgAudio.play().catch(err => console.log('Autoplay bloqueado:', err));
+// ==================== PANTALLA DE CARGA CON CARRITO ====================
+let isLoading = false;
 
-  // 2. Desvanecer cuadro de bienvenida
-  introBox.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-  introBox.style.opacity = '0';
-  introBox.style.transform = 'scale(0.85)';
+launchBtn.addEventListener('click', startLoadingSequence);
 
-  // 3. Lanzar el bólido Hot Wheels azul con su estela de carga
-  introCarContainer.classList.add('accelerate');
+function startLoadingSequence() {
+  if (isLoading) return;
+  isLoading = true;
+  launchBtn.style.pointerEvents = 'none';
+  launchBtn.style.opacity = '0.5';
 
-  // Generar chispas durante la acelerada
-  const sparkInterval = setInterval(() => {
-    createIntroSpark();
-  }, 90);
+  let progress = 0;
+  const loadingInterval = setInterval(() => {
+    progress += Math.floor(Math.random() * 4) + 2;
+    if (progress > 100) progress = 100;
 
-  // 4. Tras el pase a toda velocidad, pasar a la página principal
-  setTimeout(() => {
-    clearInterval(sparkInterval);
-    introScreen.classList.add('fade-out');
-    mainContent.classList.remove('hidden');
+    // Actualizar barra y posición del carrito azul
+    trackProgress.style.width = `${progress}%`;
+    runnerCar.style.left = `${progress}%`;
+    loaderPercent.textContent = `${progress}%`;
 
-    // Iniciar bucles de la pantalla principal
-    initCarsFleet();
-    initCanvasParticles();
-  }, 1900);
-});
+    // Cambiar texto de estado
+    if (progress < 25) {
+      loaderText.textContent = 'Calentando motores...';
+    } else if (progress < 60) {
+      loaderText.textContent = 'Inyectando nitro azul...';
+    } else if (progress < 90) {
+      loaderText.textContent = 'Cargando sorpresa especial...';
+    } else {
+      loaderText.textContent = '¡POTENCIA MÁXIMA ALCANZADA!';
+    }
 
-function createIntroSpark() {
-  const carRect = document.getElementById('intro-car').getBoundingClientRect();
+    // Chispas del escape durante la carga
+    if (Math.random() > 0.4) {
+      createRunnerSpark();
+    }
+
+    // Al llegar a 100%, ¡acelerón y transición a la escena!
+    if (progress >= 100) {
+      clearInterval(loadingInterval);
+      setTimeout(finishLoadingAndLaunch, 400);
+    }
+  }, 45);
+}
+
+function createRunnerSpark() {
+  const rect = runnerCar.getBoundingClientRect();
   const spark = document.createElement('div');
   spark.className = 'turbo-spark';
-  spark.textContent = ['⚡', '✨', '💙', '🔥'][Math.floor(Math.random() * 4)];
-  spark.style.left = `${carRect.left + (Math.random() * 50)}px`;
-  spark.style.top = `${carRect.top + (Math.random() * 40)}px`;
+  spark.textContent = ['⚡', '✨', '💙'][Math.floor(Math.random() * 3)];
+  spark.style.left = `${rect.left + 5}px`;
+  spark.style.top = `${rect.top + (Math.random() * 20)}px`;
   document.body.appendChild(spark);
-  setTimeout(() => spark.remove(), 900);
+  setTimeout(() => spark.remove(), 800);
 }
 
-// ==================== FLOTA CONTINUA DE HOT WHEELS ====================
-function initCarsFleet() {
-  // Crear una tanda inicial de carritos
-  for (let i = 0; i < 5; i++) {
-    spawnMovingCar(true);
-  }
+function finishLoadingAndLaunch() {
+  // Acelerón final del carrito fuera de pantalla
+  runnerCar.style.transition = 'left 0.8s cubic-bezier(0.2, 1, 0.3, 1), transform 0.8s ease';
+  runnerCar.style.left = '140%';
+  runnerCar.style.transform = 'translate(-50%, -65%) scale(1.4)';
 
-  // Seguir creando carritos de forma periódica
-  setInterval(() => {
-    if (document.querySelectorAll('.moving-car').length < 8) {
-      spawnMovingCar(false);
-    }
-  }, 2400);
+  // Iniciar canción Lana Del Rey - Born to Die
+  bgAudio.volume = 0.85;
+  bgAudio.play().catch(e => console.log('Audio autoplay:', e));
+
+  setTimeout(() => {
+    loaderScreen.classList.add('fade-out');
+    scene.classList.remove('hidden');
+
+    // Inicializar carritos en 3D y estrellas
+    renderCarsInSpace();
+    initSpaceCanvas();
+  }, 650);
 }
 
-function spawnMovingCar(isInitial = false) {
-  const car = document.createElement('img');
-  const imgSrc = CAR_IMAGES[Math.floor(Math.random() * CAR_IMAGES.length)];
-  car.src = imgSrc;
-  car.className = 'moving-car';
+// ==================== DISPERSIÓN DE CARRITOS EN 3D (COMO EL MONITOR) ====================
+function renderCarsInSpace() {
+  carsContainer.innerHTML = '';
 
-  // Dirección: 75% van de izquierda a derecha, 25% invertidos
-  const goRight = !imgSrc.includes('flipped');
-  const carWidth = Math.floor(Math.random() * 70) + 130; // 130px a 200px
-  car.style.width = `${carWidth}px`;
+  CARS_CONFIG.forEach((cfg, idx) => {
+    const carEl = document.createElement('div');
+    carEl.className = 'space-car';
+    carEl.style.left = cfg.x;
+    carEl.style.top = cfg.y;
+    carEl.style.zIndex = cfg.z;
+    carEl.style.width = `${cfg.w}px`;
+    carEl.style.transform = `rotate(${cfg.rot}deg) scale(${cfg.depth})`;
 
-  // Carril vertical (10% a 88% de la pantalla)
-  const topPos = Math.floor(Math.random() * 78) + 10;
-  car.style.top = `${topPos}%`;
+    const img = document.createElement('img');
+    img.src = cfg.src;
+    img.alt = 'Hot Wheels';
+    carEl.appendChild(img);
 
-  // Profundidad / escala
-  const scale = (Math.random() * 0.4 + 0.7).toFixed(2);
-  const opacity = (Math.random() * 0.3 + 0.7).toFixed(2);
-  car.style.opacity = opacity;
+    // Animación suave de suspensión/flotación
+    const floatDuration = 4 + (idx % 3);
+    const floatDelay = (idx * 0.4);
+    carEl.style.animation = `floatCar ${floatDuration}s ease-in-out ${floatDelay}s infinite alternate`;
 
-  // Velocidad de recorrido (7s a 16s)
-  const duration = Math.floor(Math.random() * 9) + 7;
-  const startX = goRight ? -250 : window.innerWidth + 250;
-  const endX = goRight ? window.innerWidth + 250 : -250;
+    // Interacción al tocar el auto: acelera y suelta corazones
+    carEl.addEventListener('pointerdown', (e) => {
+      e.stopPropagation();
+      carEl.style.transform = `rotate(${cfg.rot - 4}deg) scale(${cfg.depth * 1.25})`;
+      createTurboHearts(e.clientX, e.clientY);
+      setTimeout(() => {
+        carEl.style.transform = `rotate(${cfg.rot}deg) scale(${cfg.depth})`;
+      }, 350);
+    });
 
-  // Si es inicial, lo colocamos en medio de la pantalla
-  let currentX = isInitial 
-    ? Math.random() * (window.innerWidth - 100) 
-    : startX;
-
-  car.style.transform = `translateX(${currentX}px) scale(${scale})`;
-  carsTrackZone.appendChild(car);
-
-  // Animación suave de movimiento
-  let startTime = performance.now();
-  const totalDistance = endX - currentX;
-  const speed = (endX - startX) / (duration * 1000);
-
-  function animateCar(now) {
-    const elapsed = now - startTime;
-    const progressPos = currentX + (goRight ? (elapsed * speed) : -(elapsed * speed));
-
-    const isDone = goRight ? (progressPos > endX) : (progressPos < endX);
-    if (!isDone && car.isConnected) {
-      car.style.transform = `translateX(${progressPos}px) scale(${scale})`;
-      requestAnimationFrame(animateCar);
-    } else {
-      car.remove();
-    }
-  }
-  requestAnimationFrame(animateCar);
-
-  // Interactividad: al tocar un carrito, hace turbo
-  car.addEventListener('pointerdown', (e) => {
-    e.stopPropagation();
-    car.style.filter = 'drop-shadow(0 0 30px #00f0ff) brightness(1.3)';
-    createTurboBurst(e.clientX, e.clientY);
+    carsContainer.appendChild(carEl);
   });
+
+  // Agregar animación CSS dinámica para los autos
+  const style = document.createElement('style');
+  style.innerHTML = `
+    @keyframes floatCar {
+      0% { transform: translateY(0px) rotate(var(--rot, 0deg)); }
+      100% { transform: translateY(-10px) rotate(var(--rot, 0deg)); }
+    }
+  `;
+  document.head.appendChild(style);
 }
 
-function createTurboBurst(x, y) {
-  const emojis = ['⚡', '💙', '🔥', '✨', '🏎️'];
-  for (let i = 0; i < 5; i++) {
-    const p = document.createElement('div');
-    p.className = 'turbo-spark';
-    p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-    p.style.left = `${x + (Math.random() * 40 - 20)}px`;
-    p.style.top = `${y + (Math.random() * 40 - 20)}px`;
-    document.body.appendChild(p);
-    setTimeout(() => p.remove(), 1000);
+function createTurboHearts(x, y) {
+  const icons = ['💙', '⚡', '🏎️', '✨', '🔥'];
+  for (let i = 0; i < 6; i++) {
+    const s = document.createElement('div');
+    s.className = 'turbo-spark';
+    s.textContent = icons[Math.floor(Math.random() * icons.length)];
+    s.style.left = `${x + (Math.random() * 40 - 20)}px`;
+    s.style.top = `${y + (Math.random() * 40 - 20)}px`;
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 1000);
   }
 }
 
-// ==================== CANVAS DE PARTÍCULAS ESPACIALES Y CÓDIGO ====================
-function initCanvasParticles() {
-  const canvas = document.getElementById('digital-canvas');
+// Click en cualquier parte del fondo genera un destello
+window.addEventListener('pointerdown', (e) => {
+  if (e.target.closest('#launch-btn') || e.target.closest('.audio-control')) return;
+  const spark = document.createElement('div');
+  spark.className = 'turbo-spark';
+  spark.textContent = '✨';
+  spark.style.left = `${e.clientX}px`;
+  spark.style.top = `${e.clientY}px`;
+  document.body.appendChild(spark);
+  setTimeout(() => spark.remove(), 800);
+});
+
+// ==================== CANVAS ESPACIO CÓSMICO Y ESTRELLAS ====================
+function initSpaceCanvas() {
+  const canvas = document.getElementById('space');
   const ctx = canvas.getContext('2d');
 
   function resize() {
@@ -167,39 +184,33 @@ function initCanvasParticles() {
   window.addEventListener('resize', resize);
   resize();
 
-  const particles = [];
-  const count = Math.min(window.innerWidth < 600 ? 55 : 120, 150);
+  const stars = [];
+  const starCount = Math.min(window.innerWidth < 600 ? 90 : 220, 250);
 
-  for (let i = 0; i < count; i++) {
-    particles.push({
+  for (let i = 0; i < starCount; i++) {
+    stars.push({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      radius: Math.random() * 1.8 + 0.5,
-      speedX: (Math.random() - 0.5) * 0.4,
-      speedY: (Math.random() - 0.5) * 0.4,
-      alpha: Math.random() * 0.7 + 0.3,
-      color: Math.random() > 0.4 ? '#00f0ff' : '#0077ff'
+      r: Math.random() * 1.6 + 0.3,
+      alpha: Math.random() * 0.8 + 0.2,
+      pulse: Math.random() * 0.03 + 0.01,
+      color: Math.random() > 0.3 ? '#00f0ff' : '#ffffff'
     });
   }
 
   function loop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    for (let p of particles) {
-      p.x += p.speedX;
-      p.y += p.speedY;
-
-      if (p.x < 0) p.x = canvas.width;
-      if (p.x > canvas.width) p.x = 0;
-      if (p.y < 0) p.y = canvas.height;
-      if (p.y > canvas.height) p.y = 0;
+    for (let s of stars) {
+      s.alpha += s.pulse;
+      if (s.alpha > 1 || s.alpha < 0.2) s.pulse = -s.pulse;
 
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      ctx.fillStyle = p.color;
-      ctx.globalAlpha = p.alpha;
-      ctx.shadowBlur = 8;
-      ctx.shadowColor = p.color;
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = s.color;
+      ctx.globalAlpha = Math.max(0, Math.min(1, s.alpha));
+      ctx.shadowBlur = 6;
+      ctx.shadowColor = s.color;
       ctx.fill();
     }
     ctx.globalAlpha = 1;
@@ -209,37 +220,15 @@ function initCanvasParticles() {
   loop();
 }
 
-// ==================== CONTROLES DE MÚSICA ====================
-musicToggleBtn.addEventListener('click', () => {
+// ==================== CONTROL DE AUDIO ====================
+audioToggle.addEventListener('click', () => {
   if (bgAudio.paused) {
     bgAudio.play();
-    playIcon.textContent = '⏸️';
-    vinylDisc.classList.remove('paused');
-    equalizer.classList.remove('paused');
+    audioIcon.textContent = '⏸️';
+    vinylIcon.classList.remove('paused');
   } else {
     bgAudio.pause();
-    playIcon.textContent = '▶️';
-    vinylDisc.classList.add('paused');
-    equalizer.classList.add('paused');
-  }
-});
-
-// ==================== CARTA SECRETA MODAL ====================
-openLetterBtn.addEventListener('click', () => {
-  letterModal.classList.remove('hidden');
-});
-
-closeLetterBtn.addEventListener('click', () => {
-  letterModal.classList.add('hidden');
-});
-
-acceptLetterBtn.addEventListener('click', (e) => {
-  createTurboBurst(window.innerWidth / 2, window.innerHeight / 2);
-  letterModal.classList.add('hidden');
-});
-
-letterModal.addEventListener('click', (e) => {
-  if (e.target === letterModal) {
-    letterModal.classList.add('hidden');
+    audioIcon.textContent = '▶️';
+    vinylIcon.classList.add('paused');
   }
 });
