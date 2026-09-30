@@ -1,13 +1,32 @@
-// ==================== CONFIGURACIÓN Y ASSETS ====================
-const CARS_CONFIG = [
-  { src: 'assets/car_green.png', x: '72%', y: '68%', w: 260, z: 12, rot: -8, depth: 1.15 },    // Superdeportivo verde esquina inferior derecha
-  { src: 'assets/car_yellow.png', x: '5%', y: '74%', w: 230, z: 11, rot: 5, depth: 1.1 },      // Superdeportivo amarillo esquina inferior izquierda
-  { src: 'assets/car3_white.png', x: '6%', y: '48%', w: 180, z: 9, rot: -4, depth: 0.95 },     // Deportivo blanco con rojo
-  { src: 'assets/car1_blue.png', x: '78%', y: '28%', w: 190, z: 8, rot: 12, depth: 0.9 },      // Azul superior derecha
-  { src: 'assets/car_red.png', x: '24%', y: '20%', w: 150, z: 7, rot: -6, depth: 0.8 },        // Rojo centro superior
-  { src: 'assets/car_cyan.png', x: '46%', y: '16%', w: 140, z: 6, rot: 3, depth: 0.75 },       // Cyan al fondo
-  { src: 'assets/car2_gold.png', x: '65%', y: '45%', w: 170, z: 8, rot: -10, depth: 0.88 },    // Dorado centro derecha
-  { src: 'assets/car_purple.png', x: '28%', y: '58%', w: 160, z: 8, rot: 7, depth: 0.85 }      // Morado centro izquierda
+// ==================== CONFIGURACIÓN DE ANILLOS Y VEHÍCULOS ====================
+// Anillo 1 (Interior - Radio 190px)
+const RING_1_VEHICLES = [
+  { src: 'assets/car1_blue.png', width: 95 },
+  { src: 'assets/moto1_opt.png', width: 75 },
+  { src: 'assets/car_red.png', width: 95 },
+  { src: 'assets/moto2_opt.png', width: 75 }
+];
+
+// Anillo 2 (Medio - Radio 310px)
+const RING_2_VEHICLES = [
+  { src: 'assets/car_green.png', width: 110 },
+  { src: 'assets/moto3_flipped.png', width: 85 },
+  { src: 'assets/car_yellow.png', width: 110 },
+  { src: 'assets/car3_white.png', width: 100 },
+  { src: 'assets/moto1_opt.png', width: 85 },
+  { src: 'assets/car_cyan.png', width: 105 }
+];
+
+// Anillo 3 (Exterior - Radio 440px)
+const RING_3_VEHICLES = [
+  { src: 'assets/car2_gold.png', width: 125 },
+  { src: 'assets/moto2_opt.png', width: 95 },
+  { src: 'assets/car_purple.png', width: 120 },
+  { src: 'assets/car4_flipped.png', width: 115 },
+  { src: 'assets/moto1_opt.png', width: 95 },
+  { src: 'assets/car5_flipped.png', width: 115 },
+  { src: 'assets/car_blue_intro_opt.png', width: 125 },
+  { src: 'assets/car1_blue.png', width: 120 }
 ];
 
 // Elementos del DOM
@@ -18,7 +37,6 @@ const runnerCar = document.getElementById('runner-car');
 const loaderPercent = document.getElementById('loader-percent');
 const loaderText = document.getElementById('loader-text');
 const scene = document.getElementById('scene');
-const carsContainer = document.getElementById('cars');
 const bgAudio = document.getElementById('bg-audio');
 const audioToggle = document.getElementById('audio-toggle');
 const audioIcon = document.getElementById('audio-icon');
@@ -40,28 +58,24 @@ function startLoadingSequence() {
     progress += Math.floor(Math.random() * 4) + 2;
     if (progress > 100) progress = 100;
 
-    // Actualizar barra y posición del carrito azul
     trackProgress.style.width = `${progress}%`;
     runnerCar.style.left = `${progress}%`;
     loaderPercent.textContent = `${progress}%`;
 
-    // Cambiar texto de estado
     if (progress < 25) {
       loaderText.textContent = 'Calentando motores...';
     } else if (progress < 60) {
       loaderText.textContent = 'Inyectando nitro azul...';
     } else if (progress < 90) {
-      loaderText.textContent = 'Cargando sorpresa especial...';
+      loaderText.textContent = 'Cargando órbita y planetas...';
     } else {
       loaderText.textContent = '¡POTENCIA MÁXIMA ALCANZADA!';
     }
 
-    // Chispas del escape durante la carga
     if (Math.random() > 0.4) {
       createRunnerSpark();
     }
 
-    // Al llegar a 100%, ¡acelerón y transición a la escena!
     if (progress >= 100) {
       clearInterval(loadingInterval);
       setTimeout(finishLoadingAndLaunch, 400);
@@ -81,7 +95,6 @@ function createRunnerSpark() {
 }
 
 function finishLoadingAndLaunch() {
-  // Acelerón final del carrito fuera de pantalla
   runnerCar.style.transition = 'left 0.8s cubic-bezier(0.2, 1, 0.3, 1), transform 0.8s ease';
   runnerCar.style.left = '140%';
   runnerCar.style.transform = 'translate(-50%, -65%) scale(1.4)';
@@ -94,61 +107,61 @@ function finishLoadingAndLaunch() {
     loaderScreen.classList.add('fade-out');
     scene.classList.remove('hidden');
 
-    // Inicializar carritos en 3D y estrellas
-    renderCarsInSpace();
+    // Montar vehículos en los anillos orbitales y canvas
+    buildPlanetaryRings();
     initSpaceCanvas();
   }, 650);
 }
 
-// ==================== DISPERSIÓN DE CARRITOS EN 3D (COMO EL MONITOR) ====================
-function renderCarsInSpace() {
-  carsContainer.innerHTML = '';
+// ==================== CONSTRUCCIÓN DE ANILLOS ORBITALES 3D ====================
+function buildPlanetaryRings() {
+  setupOrbit('ring-1', RING_1_VEHICLES, 190);
+  setupOrbit('ring-2', RING_2_VEHICLES, 310);
+  setupOrbit('ring-3', RING_3_VEHICLES, 440);
+}
 
-  CARS_CONFIG.forEach((cfg, idx) => {
-    const carEl = document.createElement('div');
-    carEl.className = 'space-car';
-    carEl.style.left = cfg.x;
-    carEl.style.top = cfg.y;
-    carEl.style.zIndex = cfg.z;
-    carEl.style.width = `${cfg.w}px`;
-    carEl.style.transform = `rotate(${cfg.rot}deg) scale(${cfg.depth})`;
+function setupOrbit(ringId, vehicles, radius) {
+  const ringEl = document.getElementById(ringId);
+  ringEl.innerHTML = '';
+  const total = vehicles.length;
+  const angleStep = 360 / total;
+
+  vehicles.forEach((v, index) => {
+    const angle = index * angleStep;
+    const vContainer = document.createElement('div');
+    vContainer.className = 'orbit-vehicle';
+    vContainer.style.width = `${v.width}px`;
+
+    // Posicionamiento radial exacto tangente a la órbita y con contrarotación 3D
+    vContainer.style.transform = `
+      translate(-50%, -50%)
+      rotate(${angle}deg)
+      translateY(-${radius}px)
+      rotate(90deg)
+      rotateX(-68deg)
+    `;
 
     const img = document.createElement('img');
-    img.src = cfg.src;
+    img.src = v.src;
     img.alt = 'Hot Wheels';
-    carEl.appendChild(img);
+    vContainer.appendChild(img);
 
-    // Animación suave de suspensión/flotación
-    const floatDuration = 4 + (idx % 3);
-    const floatDelay = (idx * 0.4);
-    carEl.style.animation = `floatCar ${floatDuration}s ease-in-out ${floatDelay}s infinite alternate`;
-
-    // Interacción al tocar el auto: acelera y suelta corazones
-    carEl.addEventListener('pointerdown', (e) => {
+    // Interacción al tocar: acelera con corazones y nitro
+    vContainer.addEventListener('pointerdown', (e) => {
       e.stopPropagation();
-      carEl.style.transform = `rotate(${cfg.rot - 4}deg) scale(${cfg.depth * 1.25})`;
       createTurboHearts(e.clientX, e.clientY);
+      img.style.filter = 'drop-shadow(0 0 30px #00f0ff) brightness(1.5)';
       setTimeout(() => {
-        carEl.style.transform = `rotate(${cfg.rot}deg) scale(${cfg.depth})`;
-      }, 350);
+        img.style.filter = '';
+      }, 400);
     });
 
-    carsContainer.appendChild(carEl);
+    ringEl.appendChild(vContainer);
   });
-
-  // Agregar animación CSS dinámica para los autos
-  const style = document.createElement('style');
-  style.innerHTML = `
-    @keyframes floatCar {
-      0% { transform: translateY(0px) rotate(var(--rot, 0deg)); }
-      100% { transform: translateY(-10px) rotate(var(--rot, 0deg)); }
-    }
-  `;
-  document.head.appendChild(style);
 }
 
 function createTurboHearts(x, y) {
-  const icons = ['💙', '⚡', '🏎️', '✨', '🔥'];
+  const icons = ['💙', '⚡', '🏎️', '🏍️', '✨', '🔥'];
   for (let i = 0; i < 6; i++) {
     const s = document.createElement('div');
     s.className = 'turbo-spark';
@@ -160,9 +173,9 @@ function createTurboHearts(x, y) {
   }
 }
 
-// Click en cualquier parte del fondo genera un destello
+// Toque en cualquier lugar genera chispitas
 window.addEventListener('pointerdown', (e) => {
-  if (e.target.closest('#launch-btn') || e.target.closest('.audio-control')) return;
+  if (e.target.closest('#launch-btn') || e.target.closest('.audio-control') || e.target.closest('.orbit-vehicle')) return;
   const spark = document.createElement('div');
   spark.className = 'turbo-spark';
   spark.textContent = '✨';
