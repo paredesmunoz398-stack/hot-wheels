@@ -1,28 +1,28 @@
-// ==================== CONFIGURACIÓN DE VEHÍCULOS ====================
+// ==================== CONFIGURACIÓN DE VEHÍCULOS (CARROS Y MOTOS) ====================
 const VEHICLE_DATA = [
-  // Anillo 1 (Radio: 135)
-  { ring: 1, type: 'car', src: 'assets/car1_blue.png', w: 42, h: 22, speed: 0.016 },
-  { ring: 1, type: 'moto', src: 'assets/moto1_opt.png', w: 30, h: 28, speed: 0.016 },
-  { ring: 1, type: 'car', src: 'assets/car_red.png', w: 42, h: 22, speed: 0.016 },
-  { ring: 1, type: 'moto', src: 'assets/moto2_opt.png', w: 30, h: 26, speed: 0.016 },
+  // Anillo 1 (Interior - Radio: 140) - 4 vehículos
+  { ring: 1, type: 'car', src: 'assets/car1_blue.png', baseH: 38, speed: 0.015 },
+  { ring: 1, type: 'moto', src: 'assets/moto1_opt.png', baseH: 42, speed: 0.015 },
+  { ring: 1, type: 'car', src: 'assets/car_red.png', baseH: 38, speed: 0.015 },
+  { ring: 1, type: 'moto', src: 'assets/moto2_opt.png', baseH: 40, speed: 0.015 },
 
-  // Anillo 2 (Radio: 220)
-  { ring: 2, type: 'car', src: 'assets/car_green.png', w: 48, h: 25, speed: 0.010 },
-  { ring: 2, type: 'moto', src: 'assets/moto3_flipped.png', w: 34, h: 30, speed: 0.010 },
-  { ring: 2, type: 'car', src: 'assets/car_yellow.png', w: 48, h: 25, speed: 0.010 },
-  { ring: 2, type: 'car', src: 'assets/car3_white.png', w: 44, h: 23, speed: 0.010 },
-  { ring: 2, type: 'moto', src: 'assets/moto1_opt.png', w: 34, h: 30, speed: 0.010 },
-  { ring: 2, type: 'car', src: 'assets/car_cyan.png', w: 46, h: 24, speed: 0.010 },
+  // Anillo 2 (Medio - Radio: 230) - 6 vehículos
+  { ring: 2, type: 'car', src: 'assets/car_green.png', baseH: 42, speed: 0.009 },
+  { ring: 2, type: 'moto', src: 'assets/moto3_flipped.png', baseH: 44, speed: 0.009 },
+  { ring: 2, type: 'car', src: 'assets/car_yellow.png', baseH: 42, speed: 0.009 },
+  { ring: 2, type: 'car', src: 'assets/car3_white.png', baseH: 38, speed: 0.009 },
+  { ring: 2, type: 'moto', src: 'assets/moto1_opt.png', baseH: 44, speed: 0.009 },
+  { ring: 2, type: 'car', src: 'assets/car_cyan.png', baseH: 40, speed: 0.009 },
 
-  // Anillo 3 (Radio: 310)
-  { ring: 3, type: 'car', src: 'assets/car2_gold.png', w: 54, h: 28, speed: 0.007 },
-  { ring: 3, type: 'moto', src: 'assets/moto2_opt.png', w: 38, h: 32, speed: 0.007 },
-  { ring: 3, type: 'car', src: 'assets/car_purple.png', w: 52, h: 27, speed: 0.007 },
-  { ring: 3, type: 'car', src: 'assets/car4_flipped.png', w: 50, h: 26, speed: 0.007 },
-  { ring: 3, type: 'moto', src: 'assets/moto1_opt.png', w: 38, h: 32, speed: 0.007 },
-  { ring: 3, type: 'car', src: 'assets/car5_flipped.png', w: 50, h: 26, speed: 0.007 },
-  { ring: 3, type: 'car', src: 'assets/car_blue_intro_opt.png', w: 54, h: 28, speed: 0.007 },
-  { ring: 3, type: 'car', src: 'assets/car1_blue.png', w: 52, h: 27, speed: 0.007 }
+  // Anillo 3 (Exterior - Radio: 330) - 8 vehículos
+  { ring: 3, type: 'car', src: 'assets/car2_gold.png', baseH: 46, speed: 0.006 },
+  { ring: 3, type: 'moto', src: 'assets/moto2_opt.png', baseH: 46, speed: 0.006 },
+  { ring: 3, type: 'car', src: 'assets/car_purple.png', baseH: 44, speed: 0.006 },
+  { ring: 3, type: 'car', src: 'assets/car4_flipped.png', baseH: 44, speed: 0.006 },
+  { ring: 3, type: 'moto', src: 'assets/moto1_opt.png', baseH: 46, speed: 0.006 },
+  { ring: 3, type: 'car', src: 'assets/car5_flipped.png', baseH: 44, speed: 0.006 },
+  { ring: 3, type: 'car', src: 'assets/car_blue_intro_opt.png', baseH: 46, speed: 0.006 },
+  { ring: 3, type: 'car', src: 'assets/car1_blue.png', baseH: 44, speed: 0.006 }
 ];
 
 // Elementos del DOM
@@ -104,7 +104,7 @@ function finishLoadingAndLaunch() {
     loaderScreen.classList.add('fade-out');
     uiLayer.classList.remove('hidden');
 
-    // Inicializar el universo 3D completo con Three.js
+    // Inicializar el universo 3D en alta fidelidad
     initThreeScene();
   }, 650);
 }
@@ -117,57 +117,57 @@ let orbitingVehicles = [];
 let raycaster, mouse;
 
 function initThreeScene() {
-  // 1. Escena y Cámara
+  // 1. Escena y Niebla espacial
   scene3D = new THREE.Scene();
-  scene3D.fog = new THREE.FogExp2(0x010309, 0.0012);
+  scene3D.fog = new THREE.FogExp2(0x010309, 0.001);
 
+  // 2. Cámara (más cerca para apreciar detalles nítidos de los autos)
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 3000);
-  camera.position.set(0, 260, 480);
+  camera.position.set(0, 180, 420);
 
-  // 2. Renderizador WebGL
+  // 3. Renderizador WebGL de alta precisión
   renderer = new THREE.WebGLRenderer({ canvas: webglCanvas, antialias: true, alpha: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-  // 3. Controles interactivos (¡El usuario puede moverse libremente!)
+  // 4. Controles interactivos (¡El usuario puede moverse libremente!)
   controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
   controls.autoRotate = true;
-  controls.autoRotateSpeed = 0.6;
-  controls.minDistance = 140;
-  controls.maxDistance = 850;
+  controls.autoRotateSpeed = 0.5;
+  controls.minDistance = 120;
+  controls.maxDistance = 750;
   controls.maxPolarAngle = Math.PI * 0.88;
 
-  // 4. Luces para realismo 3D
-  const ambientLight = new THREE.AmbientLight(0x224466, 1.4);
+  // 5. Luces para resaltar modelos y planeta
+  const ambientLight = new THREE.AmbientLight(0x335577, 1.6);
   scene3D.add(ambientLight);
 
-  const sunLight = new THREE.DirectionalLight(0xffffff, 2.4);
+  const sunLight = new THREE.DirectionalLight(0xffffff, 2.5);
   sunLight.position.set(300, 200, 250);
   scene3D.add(sunLight);
 
-  const blueGlowLight = new THREE.PointLight(0x00f0ff, 4, 400);
-  blueGlowLight.position.set(0, 0, 0);
-  scene3D.add(blueGlowLight);
+  const planetGlowLight = new THREE.PointLight(0x00f0ff, 4, 380);
+  planetGlowLight.position.set(0, 0, 0);
+  scene3D.add(planetGlowLight);
 
-  // 5. Planeta 3D Real (Venus / Planeta Cósmico con textura y atmósfera)
+  // 6. Planeta 3D Real (Venus con textura y atmósfera)
   createPlanet();
 
-  // 6. Grupo de Anillos Orbitales Inclinados en 3D
+  // 7. Sistema de Anillos con Carros y Motos en Alta Definición
   createOrbitSystem();
 
-  // 7. Campo de estrellas en el fondo
+  // 8. Campo de estrellas
   createStarfield();
 
-  // 8. Raycaster para clics en carritos
+  // 9. Raycaster para clics
   raycaster = new THREE.Raycaster();
   mouse = new THREE.Vector2();
 
   window.addEventListener('resize', onWindowResize);
   webglCanvas.addEventListener('pointerdown', onScenePointerDown);
 
-  // 9. Loop de renderizado
   animate();
 }
 
@@ -175,7 +175,7 @@ function createPlanet() {
   const planetGeo = new THREE.SphereGeometry(62, 64, 64);
   const textureLoader = new THREE.TextureLoader();
 
-  // Cargar textura de mapa de Venus
+  // Cargar textura real de Venus
   const planetTex = textureLoader.load('assets/venus_map.jpg');
   planetTex.wrapS = THREE.RepeatWrapping;
   planetTex.wrapT = THREE.ClampToEdgeWrapping;
@@ -183,7 +183,7 @@ function createPlanet() {
   const planetMat = new THREE.MeshStandardMaterial({
     map: planetTex,
     color: 0x66ccff,
-    roughness: 0.75,
+    roughness: 0.7,
     metalness: 0.15,
     emissive: 0x002244,
     emissiveIntensity: 0.4
@@ -192,20 +192,20 @@ function createPlanet() {
   planetMesh = new THREE.Mesh(planetGeo, planetMat);
   scene3D.add(planetMesh);
 
-  // Atmósfera brillante azul celeste
+  // Atmósfera brillante celeste
   const atmosGeo = new THREE.SphereGeometry(68, 48, 48);
   const atmosMat = new THREE.MeshBasicMaterial({
     color: 0x00f0ff,
     transparent: true,
-    opacity: 0.28,
+    opacity: 0.3,
     side: THREE.BackSide,
     blending: THREE.AdditiveBlending
   });
   atmosphereMesh = new THREE.Mesh(atmosGeo, atmosMat);
   scene3D.add(atmosphereMesh);
 
-  // Haz de luz vertical
-  const beamGeo = new THREE.CylinderGeometry(1.5, 3.5, 350, 32);
+  // Haz de luz cósmico vertical
+  const beamGeo = new THREE.CylinderGeometry(1.5, 3.5, 380, 32);
   const beamMat = new THREE.MeshBasicMaterial({
     color: 0x00f0ff,
     transparent: true,
@@ -224,10 +224,10 @@ function createOrbitSystem() {
   orbitGroup.rotation.z = -Math.PI * 0.08;
   scene3D.add(orbitGroup);
 
-  const ringRadii = { 1: 135, 2: 220, 3: 310 };
+  const ringRadii = { 1: 140, 2: 230, 3: 330 };
 
   // Dibujar las 3 líneas de órbita brillantes
-  [135, 220, 310].forEach(r => {
+  [140, 230, 330].forEach(r => {
     const ringGeo = new THREE.RingGeometry(r - 0.75, r + 0.75, 128);
     const ringMat = new THREE.MeshBasicMaterial({
       color: 0x00f0ff,
@@ -240,45 +240,56 @@ function createOrbitSystem() {
     orbitGroup.add(ringMesh);
   });
 
-  // Cargar e instanciar cada carrito y moto como Sprite de alta fidelidad
+  // Cargar e instanciar cada carrito y moto con proporción natural y sin recorte negro
   const texLoader = new THREE.TextureLoader();
-  const loadedTextures = {};
+  const maxAniso = renderer.capabilities.getMaxAnisotropy();
 
-  // Contar cuántos vehículos hay por anillo para repartirlos a 360°
+  // Contar cuántos vehículos hay por anillo
   const counts = { 1: 0, 2: 0, 3: 0 };
   VEHICLE_DATA.forEach(v => counts[v.ring]++);
 
   const ringIndices = { 1: 0, 2: 0, 3: 0 };
 
   VEHICLE_DATA.forEach(data => {
-    if (!loadedTextures[data.src]) {
-      loadedTextures[data.src] = texLoader.load(data.src);
-    }
-    const texture = loadedTextures[data.src];
+    texLoader.load(data.src, (texture) => {
+      // Calidad máxima de textura: sin pixelado ni borrosidad
+      texture.generateMipmaps = true;
+      texture.minFilter = THREE.LinearMipmapLinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      texture.anisotropy = maxAniso;
 
-    const spriteMat = new THREE.SpriteMaterial({
-      map: texture,
-      transparent: true,
-      depthTest: true
-    });
+      // depthWrite: false evita que las transparencias se vean como cajas negras cortadas
+      const spriteMat = new THREE.SpriteMaterial({
+        map: texture,
+        transparent: true,
+        depthTest: true,
+        depthWrite: false
+      });
 
-    const sprite = new THREE.Sprite(spriteMat);
-    sprite.scale.set(data.w, data.h, 1);
+      const sprite = new THREE.Sprite(spriteMat);
 
-    const radius = ringRadii[data.ring];
-    const totalInRing = counts[data.ring];
-    const idx = ringIndices[data.ring]++;
-    const initialAngle = (idx / totalInRing) * Math.PI * 2;
+      // Calcular proporción exacta de la imagen natural para no deformar ningún carro ni moto
+      const img = texture.image;
+      const aspect = (img && img.width && img.height) ? (img.width / img.height) : 2.0;
+      const targetH = data.baseH;
+      const targetW = targetH * aspect;
+      sprite.scale.set(targetW, targetH, 1);
 
-    orbitGroup.add(sprite);
+      const radius = ringRadii[data.ring];
+      const totalInRing = counts[data.ring];
+      const idx = ringIndices[data.ring]++;
+      const initialAngle = (idx / totalInRing) * Math.PI * 2;
 
-    orbitingVehicles.push({
-      sprite: sprite,
-      radius: radius,
-      angle: initialAngle,
-      speed: data.speed,
-      baseScaleW: data.w,
-      baseScaleH: data.h
+      orbitGroup.add(sprite);
+
+      orbitingVehicles.push({
+        sprite: sprite,
+        radius: radius,
+        angle: initialAngle,
+        speed: data.speed,
+        baseScaleW: targetW,
+        baseScaleH: targetH
+      });
     });
   });
 }
@@ -313,7 +324,7 @@ function onWindowResize() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-// Interacción al tocar un carrito en el lienzo 3D
+// Interacción al tocar un carrito
 function onScenePointerDown(event) {
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -326,13 +337,11 @@ function onScenePointerDown(event) {
     const hitSprite = intersects[0].object;
     const vObj = orbitingVehicles.find(v => v.sprite === hitSprite);
     if (vObj) {
-      // Efecto turbo: agrandar momentáneamente
-      vObj.sprite.scale.set(vObj.baseScaleW * 1.5, vObj.baseScaleH * 1.5, 1);
+      vObj.sprite.scale.set(vObj.baseScaleW * 1.4, vObj.baseScaleH * 1.4, 1);
       setTimeout(() => {
         vObj.sprite.scale.set(vObj.baseScaleW, vObj.baseScaleH, 1);
-      }, 400);
+      }, 350);
 
-      // Desplegar chispas y corazones en la pantalla
       createTurboBurst(event.clientX, event.clientY);
     }
   }
@@ -355,7 +364,7 @@ function createTurboBurst(x, y) {
 function animate() {
   requestAnimationFrame(animate);
 
-  // 1. Rotación del Planeta sobre su eje
+  // 1. Rotación del Planeta
   if (planetMesh) {
     planetMesh.rotation.y += 0.0025;
   }
@@ -363,23 +372,20 @@ function animate() {
     atmosphereMesh.rotation.y += 0.0015;
   }
 
-  // 2. Órbita continua de cada Carro y Moto alrededor del planeta
+  // 2. Órbita continua de cada Carro y Moto
   orbitingVehicles.forEach(v => {
     v.angle += v.speed;
-
-    // Posición circular exacta en el plano orbital
     v.sprite.position.x = Math.cos(v.angle) * v.radius;
     v.sprite.position.y = Math.sin(v.angle) * v.radius;
-    // Leve flotación vertical armónica
     v.sprite.position.z = Math.sin(v.angle * 2) * 5;
   });
 
-  // 3. Actualizar controles interactivos
+  // 3. Controles
   if (controls) {
     controls.update();
   }
 
-  // 4. Renderizar escena
+  // 4. Renderizar
   renderer.render(scene3D, camera);
 }
 
