@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Feliz Día de los Carritos Hot Wheels 🏎️💙</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Poppins:wght@300;400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ==================== PANTALLA INTRO ==================== -->
+  <div id="intro-screen" class="intro-overlay">
+    <div class="intro-stars" id="intro-stars"></div>
+    
+    <div class="intro-center-box" id="intro-box">
+      <div class="hotwheels-badge">
+        <span class="flame-icon">🔥</span> HOT WHEELS SPECIAL EDITION <span class="flame-icon">🔥</span>
+      </div>
+      <h2 class="intro-title">Una sorpresa especial para ti</h2>
+      <p class="intro-subtitle">Sube el volumen y prepárate para acelerar</p>
+      
+      <button id="start-btn" class="nitro-btn">
+        <span class="nitro-glow"></span>
+        <span class="nitro-text">⚡ ENCENDER MOTORES ⚡</span>
+      </button>
+    </div>
+
+    <!-- Carrito azul de carga y destello -->
+    <div id="intro-car-container" class="intro-car-container">
+      <div class="speed-trail" id="speed-trail"></div>
+      <img src="assets/car_blue_intro_opt.png" alt="Hot Wheels Nitro" id="intro-car" class="intro-car-img" />
+      <div class="engine-flare"></div>
+    </div>
+  </div>
+
+  <!-- ==================== CONTENEDOR PRINCIPAL ==================== -->
+  <div id="main-content" class="main-container hidden">
+    <!-- Canvas de fondo: estrellas y partículas digitales tipo TikTok -->
+    <canvas id="digital-canvas"></canvas>
+
+    <!-- Header Neón -->
+    <header class="neon-header">
+      <div class="title-container">
+        <div class="racing-stripes">
+          <span></span><span></span><span></span>
+        </div>
+        <h1 class="glow-title">
+          <span class="word">Feliz</span>
+          <span class="word">Día</span>
+          <span class="word">de</span>
+          <span class="word">los</span>
+          <span class="word highlight">Carritos</span>
+          <span class="word hot">Hot Wheels</span>
+        </h1>
+        <p class="love-subtitle">Para la persona que acelera mi corazón a toda velocidad 🏁💙</p>
+      </div>
+    </header>
+
+    <!-- Pistas de carritos flotando y cruzando -->
+    <div id="cars-track-zone" class="cars-track-zone"></div>
+
+    <!-- Frases de Amor flotantes con efecto Neón Glassmorphism -->
+    <main class="quotes-grid">
+      <div class="quote-card card-left">
+        <span class="card-glow"></span>
+        <div class="card-icon">✨</div>
+        <p class="quote-text">"Eres mi persona favorita en todo el universo."</p>
+      </div>
+
+      <div class="quote-card card-right">
+        <span class="card-glow"></span>
+        <div class="card-icon">😊</div>
+        <p class="quote-text">"Tu risa le hace bien a todos mis días."</p>
+      </div>
+
+      <div class="quote-card card-center">
+        <span class="card-glow"></span>
+        <div class="card-icon">🌌</div>
+        <p class="quote-text">"Contigo hasta el simple brillo de las estrellas se queda corto."</p>
+      </div>
+
+      <div class="quote-card card-left delay-1">
+        <span class="card-glow"></span>
+        <div class="card-icon">🏎️💨</div>
+        <p class="quote-text">"Aceleras cada latido como si fuéramos en pista recta."</p>
+      </div>
+
+      <div class="quote-card card-right delay-2">
+        <span class="card-glow"></span>
+        <div class="card-icon">🤍</div>
+        <p class="quote-text">"Gracias por acompañarme en cada kilómetro de esta vida."</p>
+      </div>
+
+      <div class="quote-card card-center delay-3">
+        <span class="card-glow"></span>
+        <div class="card-icon">🏆</div>
+        <p class="quote-text">"El mejor premio siempre será tenerte a mi lado."</p>
+      </div>
+    </main>
+
+    <!-- Botón de Carta Especial -->
+    <div class="special-action-container">
+      <button id="open-letter-btn" class="letter-trigger-btn">
+        <span class="btn-shine"></span>
+        💌 Ver mi mensaje secreto para ti
+      </button>
+    </div>
+
+    <!-- Modal de la Carta -->
+    <div id="letter-modal" class="modal-overlay hidden">
+      <div class="letter-box">
+        <button id="close-letter-btn" class="close-modal">&times;</button>
+        <div class="letter-badge">🏎️ EDICIÓN LIMITADA 💙</div>
+        <h3 class="letter-title">Para ti, con todo mi amor</h3>
+        <div class="letter-body">
+          <p>Dicen que los verdaderos coleccionistas saben apreciar las joyas más únicas e irrepetibles...</p>
+          <p>Y entre millones de personas, tú eres la más especial que pude encontrar en mi camino.</p>
+          <p>Gracias por cada sonrisa, por cada momento que compartimos y por hacer que cada día sea emocionante y lleno de luz.</p>
+          <p class="letter-sign">¡Feliz día de los Hot Wheels! Te quiero infinito 🏁✨</p>
+        </div>
+        <button id="accept-letter-btn" class="nitro-btn small">
+          <span>💖 ¡Acelerar juntos siempre! 💖</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Barra de Música Flotante -->
+    <div class="music-floating-bar">
+      <div class="vinyl-disc" id="vinyl-disc">
+        <div class="vinyl-center"></div>
+      </div>
+      <div class="song-info">
+        <span class="song-title">Born to Die</span>
+        <span class="artist-name">Lana Del Rey</span>
+      </div>
+      <div class="equalizer" id="equalizer">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+      <button id="music-toggle-btn" class="music-btn" title="Pausar / Reproducir">
+        <span id="play-icon">⏸️</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Audio de fondo (Born to Die) -->
+  <audio id="bg-audio" preload="auto" loop>
+    <source src="assets/born_to_die.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
