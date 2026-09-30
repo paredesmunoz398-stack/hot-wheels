@@ -181,39 +181,48 @@ body {
   60%, 100% { left: 100%; }
 }
 
-/* ==================== ESCENA PRINCIPAL ==================== */
-#space {
+/* ==================== LIENZO 3D WEBGL (THREE.JS) ==================== */
+#webgl-canvas {
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
   z-index: 1;
+  outline: none;
+  cursor: grab;
 }
 
-.scene {
-  position: relative;
+#webgl-canvas:active {
+  cursor: grabbing;
+}
+
+/* ==================== CAPA DE INTERFAZ ==================== */
+.ui-layer {
+  position: fixed;
+  inset: 0;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
-  z-index: 2;
+  pointer-events: none;
+  z-index: 10;
   transition: opacity 1.2s ease;
 }
 
-.scene.hidden {
+.ui-layer.hidden {
   display: none;
   opacity: 0;
 }
 
-/* Título Neón */
+/* Título Neón Caligráfico */
 .title-wrap {
   position: absolute;
-  top: 3%;
+  top: 2.5%;
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
   width: 95%;
   max-width: 980px;
   z-index: 50;
+  pointer-events: none;
 }
 
 .main-title {
@@ -244,164 +253,28 @@ body {
   text-shadow: 0 0 12px rgba(0, 240, 255, 0.8);
 }
 
-/* ==================== SISTEMA PLANETARIO 3D (VENUS Y ANILLOS) ==================== */
-.solar-system {
+/* Indicador 3D para el usuario */
+.hint-3d {
   position: absolute;
-  top: 57%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100vw;
-  height: 85vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  perspective: 1200px;
-  transform-style: preserve-3d;
-  z-index: 5;
-  pointer-events: none;
-}
-
-/* Planeta Central tipo Venus / Planeta Azul */
-.planet-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 170px;
-  height: 170px;
-  z-index: 15;
-  pointer-events: none;
-}
-
-.planet-core {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #e0ffff 0%, #00f0ff 25%, #0077ff 55%, #002266 85%, #00091a 100%);
-  box-shadow: 
-    0 0 45px #00f0ff,
-    0 0 90px rgba(0, 119, 255, 0.85),
-    inset -25px -25px 45px rgba(0, 0, 0, 0.85),
-    inset 10px 10px 25px rgba(255, 255, 255, 0.7);
-  overflow: hidden;
-  animation: planetPulse 4s infinite ease-in-out alternate;
-}
-
-@keyframes planetPulse {
-  0% { transform: scale(0.96); box-shadow: 0 0 35px #00f0ff, 0 0 70px rgba(0, 119, 255, 0.7); }
-  100% { transform: scale(1.04); box-shadow: 0 0 55px #00f0ff, 0 0 110px rgba(0, 119, 255, 0.95); }
-}
-
-.planet-atmosphere {
-  position: absolute;
-  inset: -15px;
-  border-radius: 50%;
-  background: radial-gradient(circle, transparent 55%, rgba(0, 240, 255, 0.3) 75%, transparent 100%);
-  filter: blur(6px);
-  pointer-events: none;
-}
-
-.planet-clouds {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: repeating-linear-gradient(
-    45deg,
-    rgba(255, 255, 255, 0.08) 0px,
-    rgba(0, 240, 255, 0.15) 15px,
-    transparent 30px,
-    rgba(0, 100, 255, 0.1) 45px
-  );
-  opacity: 0.7;
-}
-
-/* Haz de luz vertical cósmico */
-.light-beam {
-  position: absolute;
-  bottom: 50%;
+  top: 13.5%;
   left: 50%;
   transform: translateX(-50%);
-  width: 4px;
-  height: 280px;
-  background: linear-gradient(to top, #ffffff, #00f0ff 45%, transparent 100%);
-  box-shadow: 0 0 25px 5px #00f0ff, 0 0 50px 10px #0044ff;
-  border-radius: 10px;
-  opacity: 0.85;
-}
-
-/* ==================== ANILLOS GIRATORIOS 3D (CARROS Y MOTOS) ==================== */
-.rings-3d-stage {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotateX(68deg) rotateZ(-12deg);
-  transform-style: preserve-3d;
-  width: 1000px;
-  height: 1000px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background: rgba(0, 25, 60, 0.65);
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  padding: 6px 18px;
+  border-radius: 50px;
+  font-size: 0.78rem;
+  color: #7dd3fc;
+  backdrop-filter: blur(8px);
   pointer-events: none;
+  animation: hintBreathe 3s infinite ease-in-out alternate;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.25);
+  white-space: nowrap;
 }
 
-.orbit-ring {
-  position: absolute;
-  border-radius: 50%;
-  border: 1.5px dashed rgba(0, 240, 255, 0.45);
-  box-shadow: 0 0 25px rgba(0, 240, 255, 0.3), inset 0 0 20px rgba(0, 240, 255, 0.15);
-  transform-style: preserve-3d;
-  pointer-events: none;
-}
-
-/* Velocidades de giro de cada anillo */
-.ring-inner {
-  width: 380px;
-  height: 380px;
-  animation: orbitRotate 16s linear infinite;
-  z-index: 11;
-}
-
-.ring-middle {
-  width: 620px;
-  height: 620px;
-  animation: orbitRotate 26s linear infinite;
-  z-index: 12;
-}
-
-.ring-outer {
-  width: 880px;
-  height: 880px;
-  animation: orbitRotate 38s linear infinite;
-  z-index: 13;
-}
-
-@keyframes orbitRotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Contenedor del vehículo (Carro / Moto) montado en la órbita */
-.orbit-vehicle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  pointer-events: auto;
-  cursor: pointer;
-  transform-style: preserve-3d;
-  transition: filter 0.2s ease;
-}
-
-.orbit-vehicle img {
-  display: block;
-  width: 100%;
-  filter: drop-shadow(0 0 12px #00f0ff) drop-shadow(0 0 25px rgba(0, 119, 255, 0.7));
-  transition: transform 0.25s ease, filter 0.25s ease;
-}
-
-.orbit-vehicle:hover img {
-  transform: scale(1.3) !important;
-  filter: drop-shadow(0 0 25px #00f0ff) drop-shadow(0 0 50px #0088ff) brightness(1.2);
+@keyframes hintBreathe {
+  0% { opacity: 0.65; transform: translateX(-50%) translateY(0); }
+  100% { opacity: 1; transform: translateX(-50%) translateY(-3px); }
 }
 
 /* ==================== FRASES LUMINOSAS ==================== */
@@ -409,7 +282,7 @@ body {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  z-index: 40;
+  z-index: 20;
 }
 
 .neon-phrase {
@@ -483,6 +356,7 @@ body {
   align-items: center;
   gap: 12px;
   box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+  pointer-events: auto;
 }
 
 .vinyl-icon {
@@ -527,7 +401,7 @@ body {
   color: #fff;
 }
 
-/* Chispas y corazones */
+/* Chispas flotantes */
 .turbo-spark {
   position: absolute;
   pointer-events: none;
@@ -543,18 +417,16 @@ body {
 
 /* Responsive para celular */
 @media (max-width: 768px) {
+  .hint-3d {
+    font-size: 0.7rem;
+    padding: 4px 12px;
+    top: 14%;
+  }
   .neon-phrase {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     white-space: normal;
-    max-width: 85%;
+    max-width: 82%;
     text-align: center;
-  }
-  .planet-container {
-    width: 125px;
-    height: 125px;
-  }
-  .rings-3d-stage {
-    transform: translate(-50%, -50%) rotateX(68deg) rotateZ(-12deg) scale(0.72);
   }
   .audio-control {
     bottom: 12px;
