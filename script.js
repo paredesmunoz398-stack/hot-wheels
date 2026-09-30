@@ -1,28 +1,28 @@
 // ==================== CONFIGURACIÓN DE VEHÍCULOS (CARROS Y MOTOS) ====================
 const VEHICLE_DATA = [
-  // Anillo 1 (Interior - Radio: 140) - 4 vehículos
-  { ring: 1, type: 'car', src: 'assets/car1_blue.png', baseH: 38, speed: 0.015 },
-  { ring: 1, type: 'moto', src: 'assets/moto1_opt.png', baseH: 42, speed: 0.015 },
-  { ring: 1, type: 'car', src: 'assets/car_red.png', baseH: 38, speed: 0.015 },
-  { ring: 1, type: 'moto', src: 'assets/moto2_opt.png', baseH: 40, speed: 0.015 },
+  // Anillo 1 (Interior - Radio: 145) - 4 vehículos
+  { ring: 1, type: 'car', src: 'assets/car1_blue.png', baseH: 44, speed: 0.014 },
+  { ring: 1, type: 'moto', src: 'assets/moto1_opt.png', baseH: 48, speed: 0.014 },
+  { ring: 1, type: 'car', src: 'assets/car_red.png', baseH: 44, speed: 0.014 },
+  { ring: 1, type: 'moto', src: 'assets/moto2_opt.png', baseH: 46, speed: 0.014 },
 
-  // Anillo 2 (Medio - Radio: 230) - 6 vehículos
-  { ring: 2, type: 'car', src: 'assets/car_green.png', baseH: 42, speed: 0.009 },
-  { ring: 2, type: 'moto', src: 'assets/moto3_flipped.png', baseH: 44, speed: 0.009 },
-  { ring: 2, type: 'car', src: 'assets/car_yellow.png', baseH: 42, speed: 0.009 },
-  { ring: 2, type: 'car', src: 'assets/car3_white.png', baseH: 38, speed: 0.009 },
-  { ring: 2, type: 'moto', src: 'assets/moto1_opt.png', baseH: 44, speed: 0.009 },
-  { ring: 2, type: 'car', src: 'assets/car_cyan.png', baseH: 40, speed: 0.009 },
+  // Anillo 2 (Medio - Radio: 240) - 6 vehículos
+  { ring: 2, type: 'car', src: 'assets/car_green.png', baseH: 50, speed: 0.009 },
+  { ring: 2, type: 'moto', src: 'assets/moto3_flipped.png', baseH: 52, speed: 0.009 },
+  { ring: 2, type: 'car', src: 'assets/car_yellow.png', baseH: 50, speed: 0.009 },
+  { ring: 2, type: 'car', src: 'assets/car3_white.png', baseH: 46, speed: 0.009 },
+  { ring: 2, type: 'moto', src: 'assets/moto1_opt.png', baseH: 52, speed: 0.009 },
+  { ring: 2, type: 'car', src: 'assets/car_cyan.png', baseH: 48, speed: 0.009 },
 
-  // Anillo 3 (Exterior - Radio: 330) - 8 vehículos
-  { ring: 3, type: 'car', src: 'assets/car2_gold.png', baseH: 46, speed: 0.006 },
-  { ring: 3, type: 'moto', src: 'assets/moto2_opt.png', baseH: 46, speed: 0.006 },
-  { ring: 3, type: 'car', src: 'assets/car_purple.png', baseH: 44, speed: 0.006 },
-  { ring: 3, type: 'car', src: 'assets/car4_flipped.png', baseH: 44, speed: 0.006 },
-  { ring: 3, type: 'moto', src: 'assets/moto1_opt.png', baseH: 46, speed: 0.006 },
-  { ring: 3, type: 'car', src: 'assets/car5_flipped.png', baseH: 44, speed: 0.006 },
-  { ring: 3, type: 'car', src: 'assets/car_blue_intro_opt.png', baseH: 46, speed: 0.006 },
-  { ring: 3, type: 'car', src: 'assets/car1_blue.png', baseH: 44, speed: 0.006 }
+  // Anillo 3 (Exterior - Radio: 345) - 8 vehículos
+  { ring: 3, type: 'car', src: 'assets/car2_gold.png', baseH: 54, speed: 0.006 },
+  { ring: 3, type: 'moto', src: 'assets/moto2_opt.png', baseH: 54, speed: 0.006 },
+  { ring: 3, type: 'car', src: 'assets/car_purple.png', baseH: 52, speed: 0.006 },
+  { ring: 3, type: 'car', src: 'assets/car4_flipped.png', baseH: 52, speed: 0.006 },
+  { ring: 3, type: 'moto', src: 'assets/moto1_opt.png', baseH: 54, speed: 0.006 },
+  { ring: 3, type: 'car', src: 'assets/car5_flipped.png', baseH: 52, speed: 0.006 },
+  { ring: 3, type: 'car', src: 'assets/car_blue_intro_opt.png', baseH: 56, speed: 0.006 },
+  { ring: 3, type: 'car', src: 'assets/car1_blue.png', baseH: 52, speed: 0.006 }
 ];
 
 // Elementos del DOM
@@ -64,7 +64,7 @@ function startLoadingSequence() {
     } else if (progress < 60) {
       loaderText.textContent = 'Inyectando nitro azul...';
     } else if (progress < 90) {
-      loaderText.textContent = 'Generando planeta y órbitas 3D...';
+      loaderText.textContent = 'Cargando planeta Venus y órbitas...';
     } else {
       loaderText.textContent = '¡POTENCIA MÁXIMA ALCANZADA!';
     }
@@ -104,7 +104,7 @@ function finishLoadingAndLaunch() {
     loaderScreen.classList.add('fade-out');
     uiLayer.classList.remove('hidden');
 
-    // Inicializar el universo 3D en alta fidelidad
+    // Inicializar el universo 3D
     initThreeScene();
   }, 650);
 }
@@ -117,40 +117,40 @@ let orbitingVehicles = [];
 let raycaster, mouse;
 
 function initThreeScene() {
-  // 1. Escena y Niebla espacial
+  // 1. Escena
   scene3D = new THREE.Scene();
   scene3D.fog = new THREE.FogExp2(0x010309, 0.001);
 
-  // 2. Cámara (más cerca para apreciar detalles nítidos de los autos)
+  // 2. Cámara (más cerca para que los carros y motos se vean nítidos y grandes)
   camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 3000);
-  camera.position.set(0, 180, 420);
+  camera.position.set(0, 160, 390);
 
-  // 3. Renderizador WebGL de alta precisión
+  // 3. Renderizador WebGL
   renderer = new THREE.WebGLRenderer({ canvas: webglCanvas, antialias: true, alpha: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-  // 4. Controles interactivos (¡El usuario puede moverse libremente!)
+  // 4. Controles interactivos (El usuario puede arrastrar para girar 360° y hacer zoom)
   controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.dampingFactor = 0.05;
   controls.autoRotate = true;
   controls.autoRotateSpeed = 0.5;
-  controls.minDistance = 120;
-  controls.maxDistance = 750;
+  controls.minDistance = 110;
+  controls.maxDistance = 700;
   controls.maxPolarAngle = Math.PI * 0.88;
 
-  // 5. Luces para resaltar modelos y planeta
-  const ambientLight = new THREE.AmbientLight(0x335577, 1.6);
+  // 5. Luces
+  const ambientLight = new THREE.AmbientLight(0x446688, 1.8);
   scene3D.add(ambientLight);
 
   const sunLight = new THREE.DirectionalLight(0xffffff, 2.5);
   sunLight.position.set(300, 200, 250);
   scene3D.add(sunLight);
 
-  const planetGlowLight = new THREE.PointLight(0x00f0ff, 4, 380);
-  planetGlowLight.position.set(0, 0, 0);
-  scene3D.add(planetGlowLight);
+  const blueGlow = new THREE.PointLight(0x00f0ff, 4, 380);
+  blueGlow.position.set(0, 0, 0);
+  scene3D.add(blueGlow);
 
   // 6. Planeta 3D Real (Venus con textura y atmósfera)
   createPlanet();
@@ -175,7 +175,6 @@ function createPlanet() {
   const planetGeo = new THREE.SphereGeometry(62, 64, 64);
   const textureLoader = new THREE.TextureLoader();
 
-  // Cargar textura real de Venus
   const planetTex = textureLoader.load('assets/venus_map.jpg');
   planetTex.wrapS = THREE.RepeatWrapping;
   planetTex.wrapT = THREE.ClampToEdgeWrapping;
@@ -224,16 +223,16 @@ function createOrbitSystem() {
   orbitGroup.rotation.z = -Math.PI * 0.08;
   scene3D.add(orbitGroup);
 
-  const ringRadii = { 1: 140, 2: 230, 3: 330 };
+  const ringRadii = { 1: 145, 2: 240, 3: 345 };
 
   // Dibujar las 3 líneas de órbita brillantes
-  [140, 230, 330].forEach(r => {
-    const ringGeo = new THREE.RingGeometry(r - 0.75, r + 0.75, 128);
+  [145, 240, 345].forEach(r => {
+    const ringGeo = new THREE.RingGeometry(r - 1.2, r + 1.2, 128);
     const ringMat = new THREE.MeshBasicMaterial({
       color: 0x00f0ff,
       side: THREE.DoubleSide,
       transparent: true,
-      opacity: 0.45,
+      opacity: 0.5,
       blending: THREE.AdditiveBlending
     });
     const ringMesh = new THREE.Mesh(ringGeo, ringMat);
@@ -242,9 +241,8 @@ function createOrbitSystem() {
 
   // Cargar e instanciar cada carrito y moto con proporción natural y sin recorte negro
   const texLoader = new THREE.TextureLoader();
-  const maxAniso = renderer.capabilities.getMaxAnisotropy();
+  const maxAniso = renderer.capabilities.getMaxAnisotropy ? renderer.capabilities.getMaxAnisotropy() : 4;
 
-  // Contar cuántos vehículos hay por anillo
   const counts = { 1: 0, 2: 0, 3: 0 };
   VEHICLE_DATA.forEach(v => counts[v.ring]++);
 
@@ -252,13 +250,11 @@ function createOrbitSystem() {
 
   VEHICLE_DATA.forEach(data => {
     texLoader.load(data.src, (texture) => {
-      // Calidad máxima de textura: sin pixelado ni borrosidad
       texture.generateMipmaps = true;
       texture.minFilter = THREE.LinearMipmapLinearFilter;
       texture.magFilter = THREE.LinearFilter;
       texture.anisotropy = maxAniso;
 
-      // depthWrite: false evita que las transparencias se vean como cajas negras cortadas
       const spriteMat = new THREE.SpriteMaterial({
         map: texture,
         transparent: true,
@@ -268,9 +264,12 @@ function createOrbitSystem() {
 
       const sprite = new THREE.Sprite(spriteMat);
 
-      // Calcular proporción exacta de la imagen natural para no deformar ningún carro ni moto
+      // Proporción natural exacta de la imagen para que NO se deforme
       const img = texture.image;
-      const aspect = (img && img.width && img.height) ? (img.width / img.height) : 2.0;
+      const aspect = (img && img.naturalWidth && img.naturalHeight)
+        ? (img.naturalWidth / img.naturalHeight)
+        : (img && img.width && img.height) ? (img.width / img.height) : 2.0;
+
       const targetH = data.baseH;
       const targetW = targetH * aspect;
       sprite.scale.set(targetW, targetH, 1);
@@ -324,7 +323,6 @@ function onWindowResize() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-// Interacción al tocar un carrito
 function onScenePointerDown(event) {
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -364,7 +362,7 @@ function createTurboBurst(x, y) {
 function animate() {
   requestAnimationFrame(animate);
 
-  // 1. Rotación del Planeta
+  // 1. Rotación del Planeta sobre su eje
   if (planetMesh) {
     planetMesh.rotation.y += 0.0025;
   }

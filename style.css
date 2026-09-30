@@ -215,19 +215,19 @@ body {
 /* Título Neón Caligráfico */
 .title-wrap {
   position: absolute;
-  top: 2.5%;
+  top: 2%;
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
   width: 95%;
-  max-width: 900px;
+  max-width: 850px;
   z-index: 50;
   pointer-events: none;
 }
 
 .main-title {
   font-family: 'Caveat', cursive;
-  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  font-size: clamp(1.8rem, 3.8vw, 2.8rem);
   font-weight: 700;
   color: #e0f7ff;
   letter-spacing: 1px;
@@ -247,7 +247,7 @@ body {
 
 .sub-glow {
   font-family: 'Caveat', cursive;
-  font-size: clamp(1rem, 2.2vw, 1.35rem);
+  font-size: clamp(0.95rem, 1.8vw, 1.25rem);
   color: #38bdf8;
   margin-top: 0.15rem;
   text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
@@ -256,14 +256,14 @@ body {
 /* Indicador 3D para el usuario */
 .hint-3d {
   position: absolute;
-  top: 12.5%;
+  top: 11%;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 20, 50, 0.6);
+  background: rgba(0, 20, 50, 0.55);
   border: 1px solid rgba(0, 240, 255, 0.35);
   padding: 4px 14px;
   border-radius: 50px;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   color: #7dd3fc;
   backdrop-filter: blur(8px);
   pointer-events: none;
@@ -277,7 +277,7 @@ body {
   100% { opacity: 1; transform: translateX(-50%) translateY(-2px); }
 }
 
-/* ==================== FRASES LUMINOSAS (MÁS PEQUEÑAS Y ELEGANTES) ==================== */
+/* ==================== FRASES LUMINOSAS (MUCHO MÁS PEQUEÑITAS Y ELEGANTES) ==================== */
 .messages-layer {
   position: absolute;
   inset: 0;
@@ -290,47 +290,47 @@ body {
   top: var(--top);
   left: var(--left);
   font-family: 'Caveat', cursive;
-  font-size: clamp(0.78rem, 1.5vw, 1.05rem); /* Letras más pequeñas a petición del usuario */
+  font-size: 13px !important; /* Expresamente pequeñitas a pedido del usuario */
   font-weight: 600;
   color: #ffffff;
   pointer-events: auto;
   cursor: default;
   white-space: nowrap;
   text-shadow: 
-    0 0 6px #00f0ff,
-    0 0 14px #0088ff,
-    0 0 24px #0044ff;
+    0 0 5px #00f0ff,
+    0 0 10px #0088ff,
+    0 0 18px #0044ff;
   animation: floatPhrase 4.5s ease-in-out infinite alternate;
   transition: transform 0.3s ease, text-shadow 0.3s ease;
-  opacity: 0.92;
+  opacity: 0.88;
 }
 
 .neon-phrase:hover {
-  transform: scale(1.15);
-  text-shadow: 0 0 12px #00f0ff, 0 0 25px #00f0ff, 0 0 45px #0055ff;
+  transform: scale(1.2);
+  text-shadow: 0 0 10px #00f0ff, 0 0 20px #00f0ff, 0 0 35px #0055ff;
   opacity: 1;
 }
 
 .neon-phrase.accent-warm {
   color: #fff2eb;
   text-shadow: 
-    0 0 6px #ff5500,
-    0 0 15px #ff2200,
-    0 0 28px #cc0000;
+    0 0 5px #ff5500,
+    0 0 12px #ff2200,
+    0 0 22px #cc0000;
 }
 
 .neon-phrase.accent-cyan {
   color: #e0ffff;
   text-shadow: 
-    0 0 8px #00ffff,
-    0 0 18px #00cccc,
-    0 0 35px #0077aa;
+    0 0 6px #00ffff,
+    0 0 14px #00cccc,
+    0 0 28px #0077aa;
 }
 
 @keyframes floatPhrase {
   0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-5px) rotate(-1deg); }
-  100% { transform: translateY(4px) rotate(1deg); }
+  50% { transform: translateY(-4px) rotate(-1deg); }
+  100% { transform: translateY(3px) rotate(1deg); }
 }
 
 .phrase-1 { animation-delay: 0s; }
@@ -351,7 +351,7 @@ body {
   z-index: 100;
   background: rgba(3, 10, 24, 0.85);
   border: 1px solid rgba(0, 240, 255, 0.4);
-  padding: 7px 15px;
+  padding: 6px 14px;
   border-radius: 50px;
   backdrop-filter: blur(12px);
   display: flex;
@@ -362,8 +362,8 @@ body {
 }
 
 .vinyl-icon {
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: radial-gradient(circle, #00f0ff 15%, #001e44 60%, #000 100%);
   border: 2px solid #00f0ff;
@@ -385,20 +385,20 @@ body {
 
 .t-name {
   font-family: 'Orbitron', sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 700;
   color: #fff;
 }
 
 .t-artist {
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   color: #7dd3fc;
 }
 
 .audio-toggle-btn {
   background: none;
   border: none;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   cursor: pointer;
   color: #fff;
 }
@@ -407,7 +407,7 @@ body {
 .turbo-spark {
   position: absolute;
   pointer-events: none;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   animation: sparkFloat 1.2s forwards ease-out;
   z-index: 999;
 }
@@ -420,14 +420,14 @@ body {
 /* Responsive para celular */
 @media (max-width: 768px) {
   .hint-3d {
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     padding: 3px 10px;
-    top: 13%;
+    top: 12%;
   }
   .neon-phrase {
-    font-size: 0.8rem;
+    font-size: 11px !important; /* En celular todavía más pequeñitas */
     white-space: normal;
-    max-width: 80%;
+    max-width: 75%;
     text-align: center;
   }
   .audio-control {
